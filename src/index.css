@@ -1,0 +1,319 @@
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap");
+
+/* resets and setup */
+
+:root {
+  color-scheme: light dark;
+
+  --main-bg-color: light-dark(#fff, #333);
+  --main-text-color: light-dark(#333, #fff);
+  --text-on-accent: light-dark(#fff, #333);
+  --accent-color: light-dark(coral, #adebb3);
+  --sec-bg-color: light-dark(#ddd, #555);
+  --overlay-color: light-dark(rgba(60, 60, 60, .8), rgba(195, 195, 195, .8));
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body,
+input,
+textarea,
+button {
+  font-family: "Open Sans", sans-serif;
+}
+
+textarea {
+  resize: none;
+}
+
+button {
+  border: none;
+  cursor: pointer;
+}
+
+a {
+  text-decoration: none;
+}
+
+li {
+  list-style-type: none;
+}
+
+/* layout */
+
+body {
+  min-height: 100vh;
+  /*   align-content: center; */
+}
+
+.container {
+  width: min(80%, 750px);
+  margin-inline: auto;
+}
+
+h1 {
+  width: max-content;
+  margin-inline: auto;
+  margin-block: 2em;
+}
+
+.new-task-form {
+  margin-block-end: 4em;
+}
+
+.new-task-text {
+  margin-block-end: .5em;
+}
+
+.new-task-text,
+.submit-new-task {
+  width: 100%;
+}
+
+.submit-new-task {
+  padding: 0.5em 1.5em;
+  border-radius: 50px;
+}
+
+.tasks {
+  padding-block-end: 5rem;
+}
+
+.no-tasks-msg {
+  padding: 1em 2em;
+}
+
+.task-item {
+  /* display: flex;
+  justify-content: space-between;
+  align-items: center; */
+  padding: 1em 2em;
+  width: 100%;
+}
+
+.task-text-wrapper {
+  position: relative;
+  margin-block-end: 1em;
+  /* width: 100%; */
+}
+
+.task-action-btns {
+  /* width: 30%; */
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.task-action-btn {
+  padding: 1em 2em;
+  margin-inline: .5em;
+}
+
+/* change above for :*/
+.icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  justify-self: center;
+}
+
+.edit-confirm-btn {
+  display: none;
+}
+
+.edit-confirm-btn.active {
+  display: block;
+  position: absolute;
+  inset-block: 5px;
+  inset-inline-end: 5px;
+  width: 2.5rem;
+  border-radius: 5px 25px 25px 5px;
+}
+
+.task-item input {
+  /* flex: .85; */
+  width: 100%;
+  padding: .5em 1em;
+}
+
+.overlay-bg {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  display: grid;
+}
+
+.confirm-delete-box {
+  width: min(80%, 900px);
+  margin: auto;
+  text-align: center;
+  padding: 2em;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;  
+}
+
+/* colors, bg, etc */
+body {
+  background-color: var(--main-bg-color);
+}
+
+h1 {
+  color: var(--accent-color);
+  text-decoration: underline overline;
+}
+
+.submit-new-task {
+  background-color: var(--accent-color);
+  color: var(--text-on-accent);
+  opacity: 1;
+  transition: all 200ms ease-in-out;
+}
+
+.submit-new-task:hover {
+  opacity: 0.85;
+}
+
+.task-item input {
+  color: var(--text-on-accent);
+  background-color: var(--accent-color);  
+}
+
+.task-item input[disabled] {
+  background-color: transparent;
+  color: var(--accent-color);
+  font-weight: 700;
+}
+
+.no-tasks-msg {
+  background-color: var(--sec-bg-color);
+  color: var(--accent-color);
+}
+
+.overlay-bg {
+  background-color: var(--overlay-color);
+}
+
+.confirm-delete-box {
+  background-color: var(--main-bg-color);
+}
+
+.confirm-delete-box .task-text {
+  color: var(--accent-color);
+}
+
+.confirm-delete-box .task-action-btn {
+  margin-inline: 2em;
+}
+
+.icon {
+  background-color: var(--accent-color);
+}
+
+/* typography */
+
+.submit-new-task,
+.new-task-text,
+.task-item,
+.no-tasks-msg,
+.task-item input {
+  font-size: 1.25rem;
+}
+
+.new-task-text,
+.no-tasks-msg,
+#editable-task {
+  font-style: italic;
+}
+
+.confirm-delete-box {
+  font-size: 1.5rem;
+}
+
+.confirm-delete-box .task-text {
+  font-weight: bold;
+  font-style: italic;
+}
+
+/* more specific ones */
+
+.new-task-text {
+  padding: .5em 1em;
+  border-radius: 25px;
+}
+
+.no-tasks-msg {
+  border-radius: 25px;
+}
+
+.task-item {
+  border-block: groove .5rem #ddd;
+}
+
+.task-action-btn {
+  border-radius: 10px;
+  border: 1px solid transparent;
+  transition: all 400ms ease-in-out;
+}
+
+.task-action-btn:hover {
+  border: 1px solid var(--accent-color);
+}
+
+.task-action-btn:disabled {
+  border: none;
+}
+
+.task-action-btn:disabled,
+.new-task-form > *:disabled {
+  cursor: not-allowed;
+  opacity: .5;
+}
+
+.task-item input {
+  border: 1px solid var(--accent-color);
+  border-radius: 25px;
+}
+
+.confirm-delete-box {
+  border-radius: 50px;
+}
+
+.icon {
+  /* avoid event.target on icon instead of btn */
+  pointer-events: none;
+}
+
+@media (min-width: 800px) {
+  .new-task-form {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 2rem;  
+    margin-block-end: 2em;
+  }
+
+  .new-task-text {
+    margin-block-end: 0;
+  }
+
+  .new-task-text,
+  .submit-new-task {
+    width: auto;
+  }
+
+
+  .task-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .task-text-wrapper {
+    width: 60%;
+    margin-block-end: 0;
+  }  
+}
