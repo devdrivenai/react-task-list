@@ -1,61 +1,61 @@
-import { useState } from 'react'
+import { useReducer } from 'react'
 import NewTaskForm from './components/NewTaskForm'
 import Tasks from './components/Tasks'
 import Overlay from './components/Overlay'
 import DeleteBox from './components/DeleteBox'
-
-import ShortUniqueId from "short-unique-id"
+import { initialTasks, tasksReducer } from './reducers/tasksReducer'
+import { initialMode, modeReducer } from './reducers/modeReducer'
 
 function App() {
-  const [ tasks, setTasks ] = useState([
-    { 
-      id: 1098,
-      text:'my first task'
-    }, 
-    {
-      id: 245,
-      text: 'my second one'
-    }
-  ])
-  const [ mode, setMode ] = useState({status: 'display', task: null}) 
+  const [ tasks, dispatchTasks ] = useReducer(tasksReducer, initialTasks)
+  const [ mode, dispatchMode ] = useReducer(modeReducer, initialMode)
   // modes: { status: 'delete', task: (<id-of-deletable-task>) }
   // modes: { status: 'edit', task: (<id-of-editable-task>) }
 
-  function handleModeChange(newMode) {
-    setMode(newMode)
+  function handleModeChange({ status, task }) {
+    dispatchMode({ 
+      type: 'changed_mode', 
+      status, 
+      task 
+    })
   }
 
   function handleDeleteTask(taskId = null) {
     if (taskId) {
-      const newTasks = tasks.filter(iterTask => iterTask.id !== taskId)
-      setTasks(newTasks)
+      dispatchTasks({
+        type: 'deleted_task',
+        taskId
+      })
     }
-    setMode({status: 'display', task: null})
+    dispatchMode({ type: 'reset_mode'})
     document.body.style.overflow = 'visible'
   }
 
   function handleEditTask(newTask) {
-    const newTaskText = newTask.text.trim()
-    console.log(newTaskText)
-    if (newTaskText !== '') {
-      setTasks(tasks.map(task => task.id === newTask.id ? newTask : task))
-    }
-    setMode({status: 'display', task: null})
+    dispatchTasks({
+      type: 'edited_task',
+      newTask
+    })
+    dispatchMode({ type: 'reset_mode'})
   }
 
   function handleSubmitNewTask(ev, text) {
     ev.preventDefault()
-    const uid = new ShortUniqueId()
     if (!text) return
-    setTasks(tasks => ([...tasks, { id: uid.rnd(), text }]))
+    dispatchTasks({
+      type: 'added_new_task',
+      text
+    })
   }
+
+  const isDeleteMode = mode.status === 'delete'
 
   return (
     <>
       <h1>Your Tasks List</h1>
-      <NewTaskForm onSubmitNewTask={handleSubmitNewTask} editingTask={mode.status==='edit'} />
+      <NewTaskForm onSubmitNewTask={handleSubmitNewTask} mode={mode} />
       <Tasks tasks={tasks} mode={mode} onModeChange={handleModeChange} onEditTask={handleEditTask} />
-      {mode.status === 'delete' &&
+      {isDeleteMode &&
       <Overlay>
         <DeleteBox tasks={tasks} taskId={mode.task} onDeleteTask={handleDeleteTask} />
       </Overlay>
